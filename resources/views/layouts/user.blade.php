@@ -62,6 +62,8 @@ $initialTime = Carbon::now('America/Matamoros');
         </div>
     </div>
 
+    @yield('content')
+
 </body>
 
 </html>
