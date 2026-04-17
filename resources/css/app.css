@@ -14,6 +14,7 @@
 }
 
 @layer components {
+    /* Navbar Styles */
     .nav-desktop-user {
         @apply bg-linear-to-r from-[#611232] to-[#9B2247] p-5 flex flex-col md:flex-row md:justify-between md:items-center gap-4;
     }
@@ -23,26 +24,24 @@
     }
     
     .nav-desktop-user h1 {
-        @apply font-bold text-2xl text-white m-0;
+        @apply font-bold text-2xl text-gray-50 m-0;
         font-family: "Google Sans", sans-serif;
     }
     
-    /* Botón menú hamburguesa (solo visible en móvil) */
     .menu-btn {
-        @apply md:hidden text-white p-2 rounded-lg transition-all duration-200 hover:bg-white/10;
+        @apply md:hidden text-gray-50 p-2 rounded-lg transition-all duration-200 hover:bg-white/10;
     }
     
     .menu-icon, .close-icon {
         @apply w-6 h-6;
     }
     
-    /* Contenedor de fecha - en móvil debajo, en desktop al centro */
     .date-container {
         @apply w-full md:w-auto md:flex-1 md:text-center;
     }
     
     .date-container a {
-        @apply font-bold text-base text-white block text-left md:text-center;
+        @apply font-bold text-base text-gray-50 block text-left md:text-center;
         font-family: "Google Sans", sans-serif;
     }
     
@@ -50,12 +49,10 @@
         @apply font-normal;
     }
     
-    /* Botón logout desktop (visible solo en desktop) */
     .logout-desktop {
         @apply hidden md:block;
     }
     
-    /* Menú móvil (solo visible en móvil cuando se abre) */
     .mobile-menu {
         @apply md:hidden bg-linear-to-r from-[#611232] to-[#9B2247] px-5 pb-5;
     }
@@ -64,22 +61,78 @@
         @apply w-full justify-center;
     }
     
-    /* Estilos base del botón */
     .btn-primary {
-        @apply font-bold text-base text-white bg-[#131313] rounded-lg px-4 py-2 cursor-pointer transition-all duration-200 inline-flex items-center;
+        @apply font-bold text-base text-gray-50 bg-[#131313] rounded-lg px-4 py-2 cursor-pointer transition-all duration-200 inline-flex items-center;
         font-family: "Google Sans", sans-serif;
     }
     
     .btn-primary:hover {
-        @apply bg-white text-black;
+        @apply bg-gray-50 text-gray-900;
     }
 
     .btn-primary:hover .icon {
-        @apply text-black;
+        @apply text-gray-900;
     }
     
     .btn-primary .icon {
-        @apply text-white w-5 h-5 inline-block mr-2;
+        @apply text-gray-50 w-5 h-5 inline-block mr-2;
+    }
+
+    /* Home Page Styles - Sin centrado vertical */
+    .home-container {
+        @apply py-8;
+    }
+    
+    .home-wrapper {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
+    
+    .home-welcome {
+        @apply flex flex-col items-center gap-2 mb-12 text-center;
+    }
+    
+    .home-welcome h1 {
+        @apply text-3xl md:text-4xl font-bold text-gray-50;
+        font-family: "Google Sans", sans-serif;
+    }
+    
+    .home-welcome p {
+        @apply text-base md:text-lg text-gray-200;
+        font-family: "Google Sans", sans-serif;
+    }
+    
+    .home-card-container {
+        @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+    }
+    
+    .home-card {
+        @apply bg-[#9B2247] rounded-lg shadow-lg p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer;
+        text-decoration: none;
+    }
+    
+    .home-card-content {
+        @apply flex items-center;
+    }
+    
+    .home-card-text {
+        @apply ml-4;
+    }
+    
+    .home-card p {
+        @apply text-xl md:text-2xl font-bold text-gray-50;
+        font-family: "Google Sans", sans-serif;
+    }
+    
+    .home-card .icon {
+        @apply w-10 h-10 md:w-12 md:h-12 text-gray-50 transition-all duration-300;
+    }
+    
+    .home-card:hover .icon {
+        @apply scale-110;
+    }
+    
+    .home-card:hover p {
+        @apply text-gray-100;
     }
 }
 
@@ -90,6 +143,6 @@
     }
 
     body {
-        @apply bg-white;
+        @apply bg-[#131313];
     }
 }
