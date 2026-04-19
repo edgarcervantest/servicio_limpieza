@@ -52,7 +52,7 @@
         <h1 class="text-3xl font-bold text-gray-800 mb-2">Ingresa a tu cuenta</h1>
         <div class="w-12 h-1 bg-gob-oro mb-6"></div> <p class="text-sm text-gray-600 mb-8">Por favor, ingresa los datos necesarios para acceder al sistema.</p>
 
-        <form action="#" method="POST" class="space-y-6">
+        <form action="{{ route('login') }}" method="POST" class="space-y-6">
           @csrf
           <div>
             <label clss="block text-sm font-semibold text-gray-700 mb-2">Correo electrónico</label>
