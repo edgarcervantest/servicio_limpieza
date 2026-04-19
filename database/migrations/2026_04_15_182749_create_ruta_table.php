@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('ruta', function (Blueprint $table) {
             $table->id('id_ruta');
-            $table->string('ruta', 255);
-            $table->unsignedBigInteger('id_colonia');
-            $table->foreign('id_colonia')->references('id_colonia')->on('colonia')->onDelete('cascade');
+            $table->string('nombre', 255);
             
         });
     }
