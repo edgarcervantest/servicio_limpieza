@@ -52,7 +52,8 @@
         <h1 class="text-3xl font-bold text-gray-800 mb-2">Ingresa a tu cuenta</h1>
         <div class="w-12 h-1 bg-gob-oro mb-6"></div> <p class="text-sm text-gray-600 mb-8">Por favor, ingresa los datos necesarios para acceder al sistema.</p>
 
-        <form action="#" method="POST" class="space-y-6">
+        <form action="{{ route('login') }}" method="POST" class="space-y-6">
+          @csrf
           <div>
             <label clss="block text-sm font-semibold text-gray-700 mb-2">Correo electrónico</label>
             <input type="email" name="email" required
@@ -66,6 +67,20 @@
               class="w-full px-4 py-3 border border-gray-300 rounded focus:ring-2 focus:ring-gob-rojo focus:border-gob-rojo outline-none transition"
               placeholder="••••••••">
           </div>
+
+          @if($errors->any())
+          <div class="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+            {{ $errors->first() }}
+          </div>
+          @endif
+
+           <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center">
+                  <input type="checkbox" id="remember" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                  <label for="remember" class="ml-2 text-sm text-gray-600">Recordarme</label>
+              </div>
+              <a href="#" class="text-sm text-gob-rojo hover:underline">¿Olvidaste tu contraseña?</a>
+            </div>
 
           <button type="submit" 
             class="w-full btn-gob text-white font-bold py-3 rounded shadow-lg uppercase tracking-wider">

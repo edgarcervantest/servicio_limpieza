@@ -18,3 +18,5 @@ Route::get('/login', [AuthController::class, 'loginForm'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
