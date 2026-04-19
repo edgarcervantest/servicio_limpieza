@@ -1,14 +1,13 @@
 <?php
 
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Models\Folio;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/welcome', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
