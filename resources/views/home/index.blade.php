@@ -29,11 +29,11 @@
                 </div>
             </a>
 
-            <a href="#" class="home-card">
+            <a href="{{ route('home.consulta') }}" class="home-card">
                 <div class="home-card-content">
                     <x-heroicon-s-magnifying-glass-circle class="icon" />
                     <div class="home-card-text">
-                        <p>Buscar orden por folio</p>
+                        <p>Buscar orden por folio</p> 
                     </div>
                 </div>
             </a>
