@@ -1,4 +1,6 @@
 import './bootstrap';
+import './rutas-colonias.js';
+import './porcentaje-ruta.js';
 
 function updateClock() {
     const now = new Date();
@@ -158,3 +160,136 @@ document.addEventListener('DOMContentLoaded', () => {
 
     actualizar(); // estado inicial
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const salida = document.getElementById('km_salida');
+    const regreso = document.getElementById('km_regreso');
+    const total = document.getElementById('km_total');
+
+    function calcular_total_km() {
+        const v1 = salida.value;
+        const v2 = regreso.value;
+        const v3 = total.value;
+
+
+        // Flujo de placeholders
+        if (!v1) {
+            total.value = '';
+            total.placeholder = 'Ingrese kilometraje inicial';
+            return;
+        }
+        if (!v2) {
+            total.value = '';
+            total.placeholder = 'Ingrese kilometraje final';
+            return;
+        }
+
+        // Cálculo
+        const resultado = ((parseFloat(v2) - parseFloat(v1)));
+
+        total.placeholder = '';
+        total.value = resultado.toFixed(2);
+    }
+
+    [salida, regreso].forEach(input => {
+        input.addEventListener('input', calcular_total_km);
+    });
+
+    calcular_total_km(); // estado inicial
+});
+
+// ── Validación del botón Guardar ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btnGuardar');
+    const form = document.querySelector('form');
+
+    if (!btn || !form) return;
+
+    const hayColoniasCargadas = () =>
+        document.querySelectorAll('.colonias-input-porcentaje').length > 0;
+
+    const validarFormulario = () => {
+
+        const selectUnidad = document.getElementById('unidad');
+
+let unidadValida = true;
+
+if (selectUnidad) {
+    const opciones = selectUnidad.querySelectorAll('option');
+
+    // Si solo tiene 1 opción (placeholder), aún no está listo
+    if (opciones.length <= 1) {
+        unidadValida = false;
+    } else {
+        unidadValida = selectUnidad.value !== '';
+    }
+}
+
+        // 1. Campos estáticos requeridos (select, inputs normales)
+        const camposEstaticos = form.querySelectorAll(
+            'input[required]:not(.colonias-input-porcentaje), select[required]'
+        );
+        const estaticosValidos = [...camposEstaticos].every(el => {
+            if (el.type === 'number') {
+                return el.value !== '';
+            }
+
+            if (el.tagName === 'SELECT') {
+                return el.value !== '' && el.value !== null;
+            }
+
+            return el.value && el.value.trim() !== '';
+        });
+
+        // 2. Colonias: solo validar si ya se cargaron
+        let coloniasValidas = true;
+        if (hayColoniasCargadas()) {
+            // Cada input de porcentaje debe tener valor
+            const inputsPorcentaje = document.querySelectorAll('.colonias-input-porcentaje');
+            const todosConValor = [...inputsPorcentaje].every(
+                inp => inp.value.trim() !== '' && parseFloat(inp.value) >= 0
+            );
+
+            // La suma debe ser exactamente 100
+            const suma = parseFloat(document.getElementById('suma_porcentaje')?.value) || 0;
+            const sumaValida = Math.abs(suma - 100) < 0.01; // tolerancia flotante
+
+            coloniasValidas = todosConValor && sumaValida;
+        } else {
+            // Si no hay colonias, la suma no aplica → resetear el campo visual
+            const sumaInput = document.getElementById('suma_porcentaje');
+            if (sumaInput) sumaInput.value = '';
+        }
+
+        const formValido = estaticosValidos && coloniasValidas;
+
+        console.log({
+    estaticosValidos,
+    coloniasValidas
+});
+
+        btn.disabled = !formValido;
+        btn.classList.toggle('btn-ready', formValido); // clase visual opcional
+    };
+
+    // Un solo listener global por evento, usando delegación
+    document.addEventListener('input', validarFormulario);
+    document.addEventListener('change', validarFormulario);
+
+    // Revalidar cuando las colonias se regeneran (evento custom de rutas-colonias.js)
+    document.addEventListener('colonias:updated', validarFormulario);
+
+    // Estado inicial
+    validarFormulario();
+});
+
+console.log('app.js cargado ✓');
+
+document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('fecha_captura');
+    if (input) {
+        const now = new Date();
+        input.value = now.toISOString().slice(0, 16);
+    }
+});
+

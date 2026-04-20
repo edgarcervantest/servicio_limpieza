@@ -9,7 +9,7 @@
                 <h1>Complete todos los apartados</h1>
             </div>
 
-            <form action="#" method="POST">
+            <form action="{{ route('orders.store') }}" method="POST">
                 @csrf
 
                 <!-- INFORMACIÓN GENERAL -->
@@ -27,7 +27,7 @@
                     <div class="collapsible-content">
                         <div class="form-grid">
                             <div class="input-group">
-                                <input type="datetime-local" name="fecha_orden" id="fecha_orden">
+                                <input type="datetime-local" name="fecha_orden" id="fecha_orden" required>
                                 <label>Fecha de la orden</label>
                             </div>
 
@@ -40,7 +40,7 @@
                                 <select id="turno" name="turno" required>
                                     <option value="" disabled hidden selected>Seleccione un turno</option>
                                     @foreach($turnos as $turno)
-                                        <option value="{{ $turno->id }}">{{ $turno->turno }}
+                                        <option value="{{ $turno->id_turno }}">{{ $turno->turno }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -51,7 +51,7 @@
                                 <select id="ruta" name="ruta" required>
                                     <option value="" disabled hidden selected>Seleccione una ruta</option>
                                     @foreach($rutas as $ruta)
-                                        <option value="{{ $ruta->id }}">{{ $ruta->ruta }}
+                                        <option value="{{ $ruta->id_ruta }}">{{ $ruta->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -80,7 +80,7 @@
                                 <select id="despachador" name="despachador" required>
                                     <option value="" disabled hidden selected>Seleccione un despachador</option>
                                     @foreach($despachadores as $despachador)
-                                        <option value="{{ $despachador->id }}">{{ $despachador->nombre }}
+                                        <option value="{{ $despachador->id_despachador }}">{{ $despachador->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -91,7 +91,7 @@
                                 <select id="chofer" name="chofer" required>
                                     <option value="" disabled hidden selected>Seleccione un chofer</option>
                                     @foreach($choferes as $chofer)
-                                        <option value="{{ $chofer->id }}">{{ $chofer->nombre }}
+                                        <option value="{{ $chofer->id_chofer }}">{{ $chofer->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -160,6 +160,12 @@
                                 <label for="km_regreso">Cantidad de kilometros al regresar</label>
                             </div>
 
+                            <div class="input-group">
+                                <input type="number" step="0.01" id="km_total" name="km_total"
+                                    placeholder="Ingrese la cantidad" readonly>
+                                <label for="km_total">Total de kilometros recorridos</label>
+                            </div>
+
 
                         </div>
                     </div>
@@ -199,13 +205,41 @@
                             </div>
 
                             <div class="input-group">
-                                <input type="number" step="0.01" id="diesel_gastado" name="diesel_gastado"
-                                    placeholder="Ingrese la cantidad" readonly>
+                                <input type="number" step="0.01" id="diesel_gastado" name="diesel_gastado" readonly>
                                 <label for="diesel_gastado">Diesel gastado (litros)</label>
                             </div>
 
                         </div>
                     </div>
+                </div>
+
+                <div id="colonias-card" class="form-card modern-card mt-6 hidden">
+
+                    <div class="card-header collapsible-header" onclick="toggleSection(this)">
+                        <h2>Colonias de la ruta</h2>
+
+                        <span class="toggle-icon">
+                            <x-heroicon-o-plus-circle class="icon-plus w-6 h-6" />
+                            <x-heroicon-o-minus-circle class="icon-minus w-6 h-6 hidden" />
+                        </span>
+                    </div>
+
+                    <div class="collapsible-content">
+                        <div class="colonias-tabla-wrapper">
+                            <table class="colonias-tabla">
+                                <thead>
+                                    <tr>
+                                        <th class="colonias-th">#</th>
+                                        <th class="colonias-th">Nombre</th>
+                                        <th class="colonias-th">Habitantes</th>
+                                        <th class="colonias-th">Porcentaje %</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="colonias-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- METRICAS Y RENDIMIENTO -->
@@ -224,35 +258,50 @@
                         <div class="form-grid">
 
                             <div class="input-group">
-                                <select id="despachador" name="despachador" required>
-                                    <option value="" disabled selected>Seleccione un despachador</option>
-                                    @foreach($despachadores as $despachador)
-                                        <option value="{{ $despachador->id }}">{{ $despachador->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <label for="turno">Despachador</label>
+                                <input type="number" step="0.01" id="suma_porcentaje" name="suma_porcentaje"
+                                    placeholder="Ingrese el porcentaje para cada colonia" readonly>
+                                <label for="suma_porcentaje">Suma de porcentaje atendido</label>
                             </div>
 
                             <div class="input-group">
-                                <select id="chofer" name="chofer" required>
-                                    <option value="" disabled selected>Seleccione un chofer</option>
-                                    @foreach($choferes as $chofer)
-                                        <option value="{{ $chofer->id }}">{{ $chofer->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <label for="turno">Chofer</label>
+                                <input type="number" step="0.01" id="porcentaje_atendido" name="porcentaje_atendido"
+                                    placeholder="Ingrese el porcentaje para cada colonia" readonly>
+                                <label for="porcentaje_atendido">Porcentaje atendido</label>
                             </div>
+
                         </div>
                     </div>
                 </div>
 
-                <!-- BOTÓN GLOBAL -->
-                <div class="form-actions mt-6">
-                    <button class="btn-secondary">Guardar</button>
+                <!-- OBSERVACIONES -->
+                <div class="form-card modern-card mt-6">
+
+                    <div class="card-header collapsible-header" onclick="toggleSection(this)">
+                        <h2>Observaciones</h2>
+
+                        <span class="toggle-icon">
+                            <x-heroicon-o-plus-circle class="icon-plus w-6 h-6" />
+                            <x-heroicon-o-minus-circle class="icon-minus w-6 h-6 hidden" />
+                        </span>
+                    </div>
+
+                    <div class="collapsible-content">
+                        <div class="form-grid">
+
+                            <div class="input-group">
+                                <textarea id="observaciones" name="observaciones"
+                                    placeholder="En caso de no tener observaciones, dejar en blanco"></textarea>
+                                <label for="observaciones">Comentario</label>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
+                <!-- BOTN GLOBAL -->
+                <div class="form-actions mt-6">
+                    <button type="submit" id="btnGuardar" class="btn-secondary">Guardar</button>
+                </div>
             </form>
         </div>
     </div>
