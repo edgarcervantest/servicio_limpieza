@@ -7,27 +7,29 @@ const calcularPorcentaje = () => {
     const sumaHidden       = document.getElementById('suma_porcentaje_hidden');
     const atendidoHidden   = document.getElementById('porcentaje_atendido_hidden');
 
-    const inputs        = document.querySelectorAll('.colonias-input-porcentaje');
+    const inputs = document.querySelectorAll('.colonias-input-porcentaje');
     const totalColonias = inputs.length;
 
     let suma = 0;
     inputs.forEach(inp => (suma += parseFloat(inp.value) || 0));
 
-    const totalEsperado      = totalColonias * 100;
-    const porcentajeAtendido = totalEsperado > 0
+    const totalEsperado = totalColonias * 100;
+
+    // ✔️ fórmula de efectividad (la de tu profe)
+    const efectividad = totalEsperado > 0
         ? parseFloat(((suma / totalEsperado) * 100).toFixed(2))
         : 0;
 
-    // Actualizar campos visuales
+    // ── UI visibles ─────────────────────
     if (sumaVisible)     sumaVisible.value     = suma.toFixed(2);
-    if (atendidoVisible) atendidoVisible.value = porcentajeAtendido.toFixed(2);
+    if (atendidoVisible) atendidoVisible.value = efectividad.toFixed(2);
 
-    // ⚡ Actualizar hiddens que van al backend — siempre, sin excepción
+    // ── backend (hidden inputs) ─────────
     if (sumaHidden)     sumaHidden.value     = suma.toFixed(2);
-    if (atendidoHidden) atendidoHidden.value = porcentajeAtendido.toFixed(2);
+    if (atendidoHidden) atendidoHidden.value = efectividad.toFixed(2);
 };
 
-// Recalcular cuando el DOM de colonias cambia (nueva ruta → nuevas filas)
+// Recalcular cuando cambia la tabla
 document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.getElementById('colonias-tbody');
     if (!tbody) return;
@@ -36,5 +38,4 @@ document.addEventListener('DOMContentLoaded', () => {
         .observe(tbody, { childList: true, subtree: true });
 });
 
-// Exponer globalmente para que app.js lo invoque
 window.calcularPorcentaje = calcularPorcentaje;

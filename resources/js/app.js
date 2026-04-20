@@ -163,22 +163,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const hayColonias = () =>
         document.querySelectorAll('.colonias-input-porcentaje').length > 0;
 
-    const coloniasValidas = () => {
-        if (!hayColonias()) return true;
+   const coloniasValidas = () => {
+    if (!hayColonias()) return true;
 
-        const inputs = [...document.querySelectorAll('.colonias-input-porcentaje')];
+    const inputs = [...document.querySelectorAll('.colonias-input-porcentaje')];
 
-        // Todos con valor numérico >= 0
-        const todosConValor = inputs.every(
-            inp => inp.value.trim() !== '' && parseFloat(inp.value) >= 0
-        );
-
-        // La suma debe ser totalColonias * 100 (cada colonia recibe 0-100%)
-        const suma = inputs.reduce((acc, inp) => acc + (parseFloat(inp.value) || 0), 0);
-        const totalEsperado = inputs.length * 100;
-
-        return todosConValor && Math.abs(suma - totalEsperado) < 0.01;
-    };
+    return inputs.every(inp => {
+        const val = parseFloat(inp.value);
+        return inp.value.trim() !== '' && val >= 0 && val <= 100;
+    });
+};
 
     // ── validar: NO llama calcularPorcentaje para evitar recursión ────────────
     const validar = () => {

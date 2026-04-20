@@ -20,7 +20,7 @@ $initialTime = Carbon::now('America/Matamoros');
     <div class="main">
         <nav class="nav-desktop-user">
             <div class="nav-header">
-                <h1>Bienvenido, User</h1>
+                <h1>Bienvenido, Edgar Cervantes</h1>
 
                 <!-- Botón hamburguesa (solo visible en móvil) -->
                 <button id="menuBtn" class="menu-btn">
