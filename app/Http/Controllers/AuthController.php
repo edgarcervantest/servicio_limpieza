@@ -24,12 +24,13 @@ class AuthController extends Controller
 
         $nombreCompleto = $request->first_name . ' ' . $request->last_name;
 
-        User::create([
+        $user = User::create([
             'name' => $nombreCompleto,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-
+        #Redirigir o iniciar sesion automaticamente
+        auth()->login($user);
         return redirect()->route('home')->with('success', 'Usuario registrado');
     }
 
@@ -39,20 +40,25 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'email' => 'required|string|email',
-        'password' => 'required|string',
-    ]);
+    {
+        $credentials = $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
 
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
-        return redirect()->intended('/home'); 
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/home');
+        }
+
+        return back()->withErrors([
+            'email' => 'El correo o la contraseña son incorrectos.',
+        ])->onlyInput('email');
     }
 
-    return back()->withErrors([
-        'email' => 'El correo o la contraseña son incorrectos.',
-    ])->onlyInput('email');
-}
+    public function logout(){
+        auth()->logout();
+        return redirect()->route('login');
+    }
 
 }

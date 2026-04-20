@@ -140,7 +140,7 @@ class OrderController extends Controller
                     'id_chofer' => $data['chofer'],
                     'id_tipo_unidad' => $data['tipo_unidad'],
                     'id_unidad' => $data['unidad'],
-                    'creado_por' => auth()->id() ?? 1,
+                    'creado_por' => auth()->id(),
 
                     'cantidad_kl' => $data['cantidad_basura'],
                     'puches' => $data['puches'],

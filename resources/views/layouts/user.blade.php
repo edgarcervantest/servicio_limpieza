@@ -20,7 +20,7 @@ $initialTime = Carbon::now('America/Matamoros');
     <div class="main">
         <nav class="nav-desktop-user">
             <div class="nav-header">
-                <h1>Bienvenido, User</h1>
+                <h1>Bienvenido, {{ ucwords(Auth::user()->name ?? 'usuario') }}</h1>
 
                 <!-- Botón hamburguesa (solo visible en móvil) -->
                 <button id="menuBtn" class="menu-btn">
@@ -42,7 +42,7 @@ $initialTime = Carbon::now('America/Matamoros');
 
             <!-- Botón logout desktop (visible solo en desktop) -->
             <div class="logout-desktop">
-                <form method="#" action="{{ route('welcome') }}">
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="btn-primary">
                         <x-heroicon-o-arrow-left-on-rectangle class="icon" />
@@ -54,13 +54,13 @@ $initialTime = Carbon::now('America/Matamoros');
 
         <!-- Menú móvil (solo contiene logout) -->
         <div id="mobileMenu" class="mobile-menu hidden">
-            <form method="POST" action="#">
+            <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button class="btn-primary mobile-logout">
                     <x-heroicon-o-arrow-left-on-rectangle class="icon" />
                     Cerrar Sesión
                 </button>
-            </form>
+            
         </div>
     </div>
 

@@ -1,101 +1,96 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Iniciar Sesión - Servicios Limpieza</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Montserrat', sans-serif; }
-    /* Colores exactos de la imagen */
-    .bg-gob-vino { background-color: #541C34; }
-    .bg-gob-rojo { background-color: #9D2449; }
-    .text-gob-oro { color: #D4C19C; }
-    .btn-gob { background-color: #9D2449; transition: all 0.3s; }
-    .btn-gob:hover { background-color: #541C34; }
-  </style>
-</head>
-<body class="bg-gray-100 antialiased">
+@extends('layouts.auth')
 
-  <header class="bg-gob-vino w-full shadow-md">
-    <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <h2 class="text-white text-lg font-bold tracking-wide "> SERVICIOS DE LIMPIEZA </h2>
-      </div>
-      
-      <!-- <nav class="hidden md:flex items-center space-x-6 text-white text-sm">
-        <button class="text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
-      </nav> -->
-    </div>
-  </header>
-
-  <div class="bg-gob-rojo w-full py-3 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-white text-lg font-medium tracking-wide"></h2>
-    </div>
-  </div>
-
-  <main class="flex flex-col items-center justify-center py-16 px-4">
+@section('content')
+<main class="flex flex-col items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
     
-    <div class="max-w-md w-full mb-8 flex items-center text-xs text-gray-500 space-x-2">
-       <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-       <span>> Iniciar sesión</span>
-    </div>
+    <div class="w-full max-w-md">
+        {{ Breadcrumbs::render('login') }}
+        
+        <div class="bg-[#1c1c1c]/90 backdrop-blur-sm rounded-2xl shadow-2xl border-t-4 border-gob-rojo overflow-hidden">
+            <div class="px-8 py-10 sm:px-10">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-gray-50 mb-3">Iniciar sesión</h1>
+                    <div class="w-20 h-1 bg-gob-oro mx-auto mb-4"></div>
+                    <p class="text-sm text-gray-300">Ingresa tus credenciales para acceder al sistema</p>
+                </div>
 
-    <div class="max-w-md w-full bg-white rounded-lg shadow-xl border-t-4 border-gob-rojo overflow-hidden">
-      <div class="p-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Ingresa a tu cuenta</h1>
-        <div class="w-12 h-1 bg-gob-oro mb-6"></div> <p class="text-sm text-gray-600 mb-8">Por favor, ingresa los datos necesarios para acceder al sistema.</p>
+                <!-- Formulario -->
+                <form action="{{ route('login') }}" method="POST" class="space-y-6">
+                    @csrf
 
-        <form action="{{ route('login') }}" method="POST" class="space-y-6">
-          @csrf
-          <div>
-            <label clss="block text-sm font-semibold text-gray-700 mb-2">Correo electrónico</label>
-            <input type="email" name="email" required
-              class="w-full px-4 py-3 border border-gray-300 rounded focus:ring-2 focus:ring-gob-rojo focus:border-gob-rojo outline-none transition"
-              placeholder="ejemplo@correo.com">
-          </div>
+                    <!-- Campo Email -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-200">
+                            Correo electrónico
+                        </label>
+                        <input type="email" 
+                               name="email" 
+                               required
+                               value="{{ old('email') }}"
+                               class="w-full px-4 py-3 bg-gray-800/50 text-gray-100 border border-gray-600 rounded-lg focus:ring-2 focus:ring-gob-rojo focus:border-gob-rojo outline-none transition placeholder-gray-500"
+                               placeholder="ejemplo@correo.com">
+                    </div>
 
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Contraseña</label>
-            <input type="password" name="password" required
-              class="w-full px-4 py-3 border border-gray-300 rounded focus:ring-2 focus:ring-gob-rojo focus:border-gob-rojo outline-none transition"
-              placeholder="••••••••">
-          </div>
+                    <!-- Campo Contraseña -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-200">
+                            Contraseña
+                        </label>
+                        <input type="password" 
+                               name="password" 
+                               required
+                               class="w-full px-4 py-3 bg-gray-800/50 text-gray-100 border border-gray-600 rounded-lg focus:ring-2 focus:ring-gob-rojo focus:border-gob-rojo outline-none transition placeholder-gray-500"
+                               placeholder="Ingresa tu contraseña">
+                    </div>
 
-          @if($errors->any())
-          <div class="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
-            {{ $errors->first() }}
-          </div>
-          @endif
+                    <!-- Errores -->
+                    @if($errors->any())
+                        <div class="p-4 text-sm text-red-200 bg-red-900/50 border border-red-700 rounded-lg">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>{{ $errors->first() }}</span>
+                            </div>
+                        </div>
+                    @endif
 
-           <div class="flex items-center justify-between flex-wrap gap-2">
-              <div class="flex items-center">
-                  <input type="checkbox" id="remember" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                  <label for="remember" class="ml-2 text-sm text-gray-600">Recordarme</label>
-              </div>
-              <a href="#" class="text-sm text-gob-rojo hover:underline">¿Olvidaste tu contraseña?</a>
+                    <!-- Opciones adicionales -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" 
+                                   id="remember" 
+                                   name="remember"
+                                   class="w-4 h-4 text-gob-rojo bg-gray-700 border-gray-600 rounded focus:ring-gob-rojo focus:ring-offset-0">
+                            <span class="ml-2 text-sm text-gray-300">Recordarme</span>
+                        </label>
+                        <a href="#" class="text-sm text-gray-300 hover:text-gob-oro hover:text-gob-rojo transition-colors">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+
+                    <!-- Botón Submit -->
+                    <button type="submit"
+                            class="w-full group relative flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#9B2247] to-[#7D1A3A] text-gray-50 font-bold text-base rounded-lg hover:from-[#7D1A3A] hover:to-[#611232] transition-all duration-200 transform hover:scale-[1.02] focus:ring-2 focus:ring-gob-rojo focus:ring-offset-2 focus:ring-offset-[#1c1c1c]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                        </svg>
+                        <span>Acceder al sistema</span>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="mt-8 pt-6 border-t border-gray-700 text-center">
+                    <p class="text-sm text-gray-400">
+                        ¿No tienes una cuenta?
+                        <a href="{{ route('register') }}" class="hover:text-gob-rojo font-semibold transition-colors">
+                            Crear una cuenta
+                        </a>
+                    </p>
+                </div>
             </div>
-
-          <button type="submit" 
-            class="w-full btn-gob text-white font-bold py-3 rounded shadow-lg uppercase tracking-wider">
-            Acceder
-          </button>
-        </form>
-
-        <div class="flex items-center justify-between flex-wrap gap-2">
-          <a href="#" class="text-sm text-gob-rojo hover:underline">Crear una cuenta</a>
-          <a href="{{ route('welcome') }}" class="text-sm text-gob-rojo hover:underline">Regresar al inicio</a>
         </div>
-        <p class="text-xs text-gray-400 uppercase tracking-widest">Servicios de Limpieza</p>
-      </div>
     </div>
-  </main>
-
-</body>
-</html>
+</main>
+@endsection

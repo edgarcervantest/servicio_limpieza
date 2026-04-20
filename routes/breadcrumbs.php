@@ -13,8 +13,21 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push('Inicio', route('home'));
 });
 
-// Home > Blog
 Breadcrumbs::for('create', function (BreadcrumbTrail $trail) {
     $trail->parent('home'); //padre de la breadcrumb
     $trail->push('Crear nueva orden', route('orders.create'));
+});
+
+Breadcrumbs::for('welcome', function (BreadcrumbTrail $trail) {
+    $trail->push('Inicio', route('welcome'));
+});
+
+Breadcrumbs::for('login', function (BreadcrumbTrail $trail) {
+    $trail->parent('welcome'); //padre de la breadcrumb
+    $trail->push('Iniciar sesión', route('login'));
+});
+
+Breadcrumbs::for('register', function (BreadcrumbTrail $trail) {
+    $trail->parent('welcome'); //padre de la breadcrumb
+    $trail->push('Registrarse', route('register'));
 });

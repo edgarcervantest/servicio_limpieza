@@ -2,7 +2,7 @@
 @section('content')
 <!DOCTYPE html>
 <html lang="es">
-<body class="bg-gray-50 antialiased flex flex-col min-h-screen">
+<body class="antialiased flex flex-col min-h-screen">
 
   <!-- ======================= HERO ======================= -->
   <section class="hero-pattern border-b border-gray-200">
@@ -12,18 +12,18 @@
           <!-- <div class="inline-flex items-center gap-2 bg-gob-green-light text-gob-green text-sm font-semibold px-3 py-1 rounded-full mb-4">
             <span class="w-2 h-2 bg-gob-green rounded-full"></span> Ventanilla 24/7
           </div> -->
-          <h1 class="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight leading-tight">
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-50 tracking-tight leading-tight">
             Servicios de <span class="text-gob-green">limpieza urbana</span> para una ciudad más limpia
           </h1>
-          <p class="mt-4 text-lg text-gray-600 max-w-lg">
-            Recogida de residuos, barrido de calles, limpieza de mercados y más. Programa tu servicio o reporta incidencias en tiempo real.
+          <p class="mt-4 text-lg text-gray-400 max-w-lg">
+            Recolección de residuos, barrido de calles, limpieza de mercados y más. Programa tu servicio o reporta incidencias en tiempo real.
           </p>
           <div class="mt-8 flex flex-wrap gap-4">
             <a href="#" class="font-bold ml-4 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#9D2449] transition-none">
               Servicios
             </a>
             <a href="#" class="inline-flex items-center px-5 py-3 border border-gray-300 text-base font-medium rounded-md bg-white text-gray-700 hover:bg-gray-50 transition">
-              Conocer Mas
+              Conocer más
             </a>
           </div>
           <!-- Ejemplo de 'buscador rápido' similar a imagen: trámites -->
@@ -48,7 +48,7 @@
     </div>
   </section>
   <!-- ======================= FOOTER (estilo institucional) ======================= -->
-  <footer class="bg-gray-900 text-gray-300 mt-auto">
+  <footer class="bg-linear-to-r from-[#611232] to-[#9B2247] text-gray-300 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>

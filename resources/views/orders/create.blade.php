@@ -317,10 +317,10 @@
                 <input type="hidden" id="suma_porcentaje_hidden" name="suma_porcentaje">
                 <input type="hidden" id="porcentaje_atendido_hidden" name="porcentaje_atendido">
 
-                <!-- BOTÓN -->
-                <div class="form-actions mt-6">
-                    <button type="submit" id="btnGuardar" class="btn-secondary">Guardar</button>
-                </div>
+               <!-- BOTÓN -->
+<div class="form-actions mt-6 flex justify-center">
+    <button type="submit" id="btnGuardar" class="btn-secondary">Guardar</button>
+</div>
             </form>
         </div>
     </div>

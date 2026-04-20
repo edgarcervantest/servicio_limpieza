@@ -89,7 +89,7 @@
     }
 
     .btn-secondary {
-        @apply font-bold text-base text-gray-50 bg-[#9B2247] rounded-lg px-4 py-2 cursor-pointer transition-all duration-200 inline-flex items-center;
+        @apply font-bold text-base text-center text-gray-50 bg-[#9B2247] rounded-lg px-4 py-2 cursor-pointer transition-all duration-200 inline-flex items-center;
         font-family: "Google Sans", sans-serif;
     }
 
@@ -246,7 +246,7 @@
     .input-group input,
     .input-group select,
     .input-group textarea {
-        @apply w-full bg-transparent border border-gray-600 rounded-lg px-3 pt-5 pb-3 text-gray-50 outline-none transition-all duration-200;
+        @apply w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 pt-5 pb-3 text-gray-50 outline-none transition-all duration-200;
         font-family: "Google Sans", sans-serif;
     }
 
@@ -279,7 +279,7 @@
 
     /* BUTTON AREA */
     .form-actions {
-        @apply mt-6 flex justify-end;
+        @apply mt-6 flex justify-between items-center;
     }
 
     .collapsible-header {

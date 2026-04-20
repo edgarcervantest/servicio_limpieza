@@ -21,6 +21,8 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 Route::get('/orders/get_by_tipo_unidad', [OrderController::class, 'get_by_tipo_unidad'])->name('orders.get_by_tipo_unidad');
