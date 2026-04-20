@@ -8,6 +8,30 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function registerForm()
+    {
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $nombreCompleto = $request->first_name . ' ' . $request->last_name;
+
+        User::create([
+            'name' => $nombreCompleto,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->route('home')->with('success', 'Usuario registrado');
+    }
 
     public function loginForm()
     {
@@ -30,4 +54,5 @@ class AuthController extends Controller
         'email' => 'El correo o la contraseña son incorrectos.',
     ])->onlyInput('email');
 }
+
 }
