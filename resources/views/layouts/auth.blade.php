@@ -10,9 +10,7 @@ $initialTime = Carbon::now('America/Matamoros');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Ordenes</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Servicios de Limpieza</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -20,7 +18,7 @@ $initialTime = Carbon::now('America/Matamoros');
     <div class="main">
         <nav class="nav-desktop-user">
             <div class="nav-header">
-                <h1>Bienvenido, User</h1>
+                <h1>PAGINA DE BIENVENIDA</h1>
 
                 <!-- Botón hamburguesa (solo visible en móvil) -->
                 <button id="menuBtn" class="menu-btn">
@@ -42,25 +40,21 @@ $initialTime = Carbon::now('America/Matamoros');
 
             <!-- Botón logout desktop (visible solo en desktop) -->
             <div class="logout-desktop">
-                <form method="#" action="#">
-                    @csrf
-                    <button class="btn-primary">
-                        <x-heroicon-o-arrow-left-on-rectangle class="icon" />
-                        Cerrar Sesión
-                    </button>
-                </form>
+
+                <a href="{{ route('login') }}" class="btn-primary">
+                    <x-heroicon-o-arrow-right-on-rectangle class="icon" />
+                    Iniciar Sesión
+                </a>
             </div>
         </nav>
 
         <!-- Menú móvil (solo contiene logout) -->
         <div id="mobileMenu" class="mobile-menu hidden">
-            <form method="POST" action="#">
-                @csrf
-                <button class="btn-primary mobile-logout">
-                    <x-heroicon-o-arrow-left-on-rectangle class="icon" />
-                    Cerrar Sesión
-                </button>
-            </form>
+
+            <a href="{{ route('login') }}" class="btn-primary mobile-logout">
+                <x-heroicon-o-arrow-right-on-rectangle class="icon" />
+                Iniciar Sesión
+            </a>
         </div>
     </div>
 
