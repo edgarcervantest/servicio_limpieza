@@ -387,6 +387,22 @@
            focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400
            transition;
 }
+
+/* ── Botón guardar ──────────────────────────────────── */
+#btnGuardar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#btnGuardar:not(:disabled) {
+    opacity: 1;
+    cursor: pointer;
+}
+
+#btnGuardar:not(:disabled):hover {
+    background-color: #7D1A3A;
+    transform: translateY(-1px);
+}
  
 }
 

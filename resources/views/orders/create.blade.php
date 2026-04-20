@@ -318,7 +318,7 @@
                 <input type="hidden" id="porcentaje_atendido_hidden" name="porcentaje_atendido">
 
                 <!-- BOTÓN -->
-                <div class="form-actions mt-6">
+                <div class="form-actions mt-6 flex justify-center">
                     <button type="submit" id="btnGuardar" class="btn-secondary">Guardar</button>
                 </div>
             </form>
