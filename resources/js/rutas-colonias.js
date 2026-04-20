@@ -21,6 +21,7 @@ const initRutaColonias = () => {
                 <input
                     type="number"
                     name="colonias[${colonia.id_colonia}][porcentaje]"
+                    
                     class="colonias-input-porcentaje"
                     min="0"
                     max="100"
@@ -29,6 +30,13 @@ const initRutaColonias = () => {
                     required
                     data-colonia-id="${colonia.id_colonia}"
                 />
+
+                 <!-- Campo oculto para habitantes -->
+            <input 
+                type="hidden" 
+                name="colonias[${colonia.id_colonia}][habitantes]" 
+                value="${colonia.habitantes}"
+            />
             </td>
         `;
         return tr;

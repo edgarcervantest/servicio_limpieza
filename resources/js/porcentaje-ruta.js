@@ -1,54 +1,40 @@
-// ============================================================
-// porcentaje-ruta.js → importar en app.js:
-//   import './porcentaje-ruta.js'
-// ============================================================
+// porcentaje-ruta.js
+// Responsabilidad: SOLO calcular y escribir valores. Sin validar, sin disparar eventos.
 
-const initPorcentajeRuta = () => {
+const calcularPorcentaje = () => {
+    const sumaVisible      = document.getElementById('suma_porcentaje');
+    const atendidoVisible  = document.getElementById('porcentaje_atendido');
+    const sumaHidden       = document.getElementById('suma_porcentaje_hidden');
+    const atendidoHidden   = document.getElementById('porcentaje_atendido_hidden');
 
-    const sumaInput = document.getElementById('suma_porcentaje');
-    const atendidoInput = document.getElementById('porcentaje_atendido');
+    const inputs        = document.querySelectorAll('.colonias-input-porcentaje');
+    const totalColonias = inputs.length;
 
-    if (!sumaInput || !atendidoInput) return;
+    let suma = 0;
+    inputs.forEach(inp => (suma += parseFloat(inp.value) || 0));
 
-    const calcular = () => {
-        const inputs = document.querySelectorAll('.colonias-input-porcentaje');
+    const totalEsperado      = totalColonias * 100;
+    const porcentajeAtendido = totalEsperado > 0
+        ? parseFloat(((suma / totalEsperado) * 100).toFixed(2))
+        : 0;
 
-        let suma = 0;
-        let totalColonias = inputs.length;
+    // Actualizar campos visuales
+    if (sumaVisible)     sumaVisible.value     = suma.toFixed(2);
+    if (atendidoVisible) atendidoVisible.value = porcentajeAtendido.toFixed(2);
 
-        inputs.forEach(input => {
-            const valor = parseFloat(input.value) || 0;
-            suma += valor;
-        });
-
-        // total esperado (100 por colonia)
-        const totalEsperado = totalColonias * 100;
-
-        // porcentaje atendido real
-        const porcentajeAtendido = totalEsperado > 0
-            ? (suma / totalEsperado) * 100
-            : 0;
-
-        // actualizar inputs
-        sumaInput.value = suma.toFixed(2);
-        atendidoInput.value = porcentajeAtendido.toFixed(2);
-    };
-
-    // escuchar cambios en inputs dinámicos
-    document.addEventListener('input', (e) => {
-        if (e.target.classList.contains('colonias-input-porcentaje')) {
-            calcular();
-        }
-    });
-
-    // recalcular cuando cambian las colonias (nueva ruta)
-    const observer = new MutationObserver(() => calcular());
-
-    const tbody = document.getElementById('colonias-tbody');
-    if (tbody) {
-        observer.observe(tbody, { childList: true, subtree: true });
-    }
+    // ⚡ Actualizar hiddens que van al backend — siempre, sin excepción
+    if (sumaHidden)     sumaHidden.value     = suma.toFixed(2);
+    if (atendidoHidden) atendidoHidden.value = porcentajeAtendido.toFixed(2);
 };
 
-// ejecutar
-document.addEventListener('DOMContentLoaded', initPorcentajeRuta);
+// Recalcular cuando el DOM de colonias cambia (nueva ruta → nuevas filas)
+document.addEventListener('DOMContentLoaded', () => {
+    const tbody = document.getElementById('colonias-tbody');
+    if (!tbody) return;
+
+    new MutationObserver(() => calcularPorcentaje())
+        .observe(tbody, { childList: true, subtree: true });
+});
+
+// Exponer globalmente para que app.js lo invoque
+window.calcularPorcentaje = calcularPorcentaje;

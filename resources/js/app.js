@@ -1,83 +1,58 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// app.js — punto de entrada único
+// ─────────────────────────────────────────────────────────────────────────────
 import './bootstrap';
 import './rutas-colonias.js';
 import './porcentaje-ruta.js';
 
-function updateClock() {
-    const now = new Date();
-
-    const options = {
+// ── 1. RELOJ ─────────────────────────────────────────────────────────────────
+const updateClock = () => {
+    const formatter = new Intl.DateTimeFormat('es-MX', {
         timeZone: 'America/Matamoros',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-    };
-
-    const formatter = new Intl.DateTimeFormat('es-MX', options);
-    const formattedParts = formatter.formatToParts(now);
-
-    let dateTime = {};
-    formattedParts.forEach(part => {
-        if (part.type !== 'literal') {
-            dateTime[part.type] = part.value;
-        }
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false,
     });
 
-    const formattedTime = `${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}`;
+    const parts = {};
+    formatter.formatToParts(new Date()).forEach(({ type, value }) => {
+        if (type !== 'literal') parts[type] = value;
+    });
 
-    // Actualizar el campo de fecha captura si existe
-    const fechaCapturaInput = document.getElementById('fecha_captura');
-    if (fechaCapturaInput) {
-        // Para input type="datetime-local" necesitas formato YYYY-MM-DDTHH:MM
-        const dateForInput = `${dateTime.year}-${dateTime.month}-${dateTime.day}T${dateTime.hour}:${dateTime.minute}`;
-        fechaCapturaInput.value = dateForInput;
+    const fechaCaptura = document.getElementById('fecha_captura');
+    if (fechaCaptura) {
+        fechaCaptura.value = `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
     }
 
-    // Si tienes un reloj en vivo
     const liveClock = document.getElementById('liveClock');
     if (liveClock) {
-        liveClock.textContent = formattedTime;
+        liveClock.textContent =
+            `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`;
     }
+};
 
-    return formattedTime;
-}
-
-// Exponer la función globalmente para usarla en cualquier vista
 window.updateClock = updateClock;
-window.actualizarFechaCaptura = updateClock; // Alias opcional
+window.actualizarFechaCaptura = updateClock;
 
-// Inicializar cuando el DOM esté listo
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        updateClock();
-        setInterval(updateClock, 1000);
-    });
-} else {
-    updateClock();
-    setInterval(updateClock, 1000);
-}
+updateClock();
+setInterval(updateClock, 1000);
 
-// Menú hamburguesa
+// ── 2. MENÚ HAMBURGUESA ───────────────────────────────────────────────────────
 const menuBtn = document.getElementById('menuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 const menuIcon = document.querySelector('.menu-icon');
 const closeIcon = document.querySelector('.close-icon');
 
-if (menuBtn) {
-    menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-        menuIcon.classList.toggle('hidden');
-        closeIcon.classList.toggle('hidden');
-    });
-}
+menuBtn?.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    menuIcon.classList.toggle('hidden');
+    closeIcon.classList.toggle('hidden');
+});
 
-document.addEventListener('click', (event) => {
-    if (menuBtn && mobileMenu) {
-        const isClickInside = menuBtn.contains(event.target) || mobileMenu.contains(event.target);
-        if (!isClickInside && !mobileMenu.classList.contains('hidden')) {
+document.addEventListener('click', (e) => {
+    if (!menuBtn || !mobileMenu) return;
+    if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+        if (!mobileMenu.classList.contains('hidden')) {
             mobileMenu.classList.add('hidden');
             menuIcon.classList.remove('hidden');
             closeIcon.classList.add('hidden');
@@ -85,211 +60,164 @@ document.addEventListener('click', (event) => {
     }
 });
 
-function toggleSection(header) {
+// ── 3. COLLAPSIBLE ────────────────────────────────────────────────────────────
+const toggleSection = (header) => {
     const section = header.parentElement;
-    const content = section.querySelector('.collapsible-content');
-    const plus = section.querySelector('.icon-plus');
-    const minus = section.querySelector('.icon-minus');
-
-    content.classList.toggle('open');
-
-    plus.classList.toggle('hidden');
-    minus.classList.toggle('hidden');
-}
+    section.querySelector('.collapsible-content').classList.toggle('open');
+    section.querySelector('.icon-plus').classList.toggle('hidden');
+    section.querySelector('.icon-minus').classList.toggle('hidden');
+};
 
 window.toggleSection = toggleSection;
 
+// ── 4. TODO LO QUE REQUIERE DOM ───────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-    const tipo = document.getElementById('tipo_unidad');
+
+    // 4a. Select dependiente: tipo_unidad → unidades ──────────────────────────
+    const tipoUnidad = document.getElementById('tipo_unidad');
     const unidad = document.getElementById('unidad');
 
-    // Estado inicial
-    unidad.innerHTML = '<option value="" disabled hidden selected>Seleccione primero un tipo de unidad</option>';
+    if (tipoUnidad && unidad) {
+        unidad.innerHTML =
+            '<option value="" disabled hidden selected>Seleccione primero un tipo de unidad</option>';
 
-    tipo.addEventListener('change', function () {
-        const id = this.value;
-
-        fetch(this.dataset.url + '?id_tipo_unidad=' + id)
-            .then(res => res.json())
-            .then(data => {
-                unidad.innerHTML = data.html;
-            });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const inicial = document.getElementById('diesel_inicial');
-    const cargado = document.getElementById('diesel_cargado');
-    const final = document.getElementById('diesel_final');
-    const gastado = document.getElementById('diesel_gastado');
-
-    function actualizar() {
-        const v1 = inicial.value;
-        const v2 = cargado.value;
-        const v3 = final.value;
-
-
-        // Flujo de placeholders
-        if (!v1) {
-            gastado.value = '';
-            gastado.placeholder = 'Ingrese diesel inicial';
-            return;
-        }
-        if (!v2) {
-            gastado.value = '';
-            gastado.placeholder = 'Ingrese diesel cargado';
-            return;
-        }
-
-        if (!v3) {
-            gastado.value = '';
-            gastado.placeholder = 'Ingrese diesel final';
-            return;
-        }
-
-        // Cálculo
-        const resultado = ((parseFloat(v1) + parseFloat(v2)) - parseFloat(v3));
-
-        gastado.placeholder = '';
-        gastado.value = resultado.toFixed(2);
+        tipoUnidad.addEventListener('change', function () {
+            fetch(this.dataset.url + '?id_tipo_unidad=' + this.value)
+                .then(res => res.json())
+                .then(data => {
+                    unidad.innerHTML = data.html;
+                    // Notificar al validador
+                    document.dispatchEvent(new CustomEvent('unidad:updated'));
+                });
+        });
     }
 
-    [inicial, cargado, final].forEach(input => {
-        input.addEventListener('input', actualizar);
-    });
+    // 4b. Diesel gastado ───────────────────────────────────────────────────────
+    const dieselInicial = document.getElementById('diesel_inicial');
+    const dieselCargado = document.getElementById('diesel_cargado');
+    const dieselFinal = document.getElementById('diesel_final');
+    const dieselGastado = document.getElementById('diesel_gastado');
 
-    actualizar(); // estado inicial
-});
+    const calcularDiesel = () => {
+        if (!dieselInicial || !dieselCargado || !dieselFinal || !dieselGastado) return;
 
-document.addEventListener('DOMContentLoaded', () => {
-    const salida = document.getElementById('km_salida');
-    const regreso = document.getElementById('km_regreso');
-    const total = document.getElementById('km_total');
+        const v1 = dieselInicial.value;
+        const v2 = dieselCargado.value;
+        const v3 = dieselFinal.value;
 
-    function calcular_total_km() {
-        const v1 = salida.value;
-        const v2 = regreso.value;
-        const v3 = total.value;
+        if (!v1) { dieselGastado.value = ''; dieselGastado.placeholder = 'Ingrese diesel inicial'; return; }
+        if (!v2) { dieselGastado.value = ''; dieselGastado.placeholder = 'Ingrese diesel cargado'; return; }
+        if (!v3) { dieselGastado.value = ''; dieselGastado.placeholder = 'Ingrese diesel final'; return; }
 
+        dieselGastado.placeholder = '';
+        dieselGastado.value = (parseFloat(v1) + parseFloat(v2) - parseFloat(v3)).toFixed(2);
+    };
 
-        // Flujo de placeholders
-        if (!v1) {
-            total.value = '';
-            total.placeholder = 'Ingrese kilometraje inicial';
-            return;
-        }
-        if (!v2) {
-            total.value = '';
-            total.placeholder = 'Ingrese kilometraje final';
-            return;
-        }
+    [dieselInicial, dieselCargado, dieselFinal].forEach(el => el?.addEventListener('input', calcularDiesel));
+    calcularDiesel();
 
-        // Cálculo
-        const resultado = ((parseFloat(v2) - parseFloat(v1)));
+    // 4c. Kilómetros totales ───────────────────────────────────────────────────
+    const kmSalida = document.getElementById('km_salida');
+    const kmRegreso = document.getElementById('km_regreso');
+    const kmTotal = document.getElementById('km_total');
 
-        total.placeholder = '';
-        total.value = resultado.toFixed(2);
-    }
+    const calcularKm = () => {
+        if (!kmSalida || !kmRegreso || !kmTotal) return;
 
-    [salida, regreso].forEach(input => {
-        input.addEventListener('input', calcular_total_km);
-    });
+        const v1 = kmSalida.value;
+        const v2 = kmRegreso.value;
 
-    calcular_total_km(); // estado inicial
-});
+        if (!v1) { kmTotal.value = ''; kmTotal.placeholder = 'Ingrese kilometraje inicial'; return; }
+        if (!v2) { kmTotal.value = ''; kmTotal.placeholder = 'Ingrese kilometraje final'; return; }
 
-// ── Validación del botón Guardar ─────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+        kmTotal.placeholder = '';
+        kmTotal.value = (parseFloat(v2) - parseFloat(v1)).toFixed(2);
+    };
+
+    [kmSalida, kmRegreso].forEach(el => el?.addEventListener('input', calcularKm));
+    calcularKm();
+
+    // ── 5. VALIDADOR CENTRAL ──────────────────────────────────────────────────
     const btn = document.getElementById('btnGuardar');
     const form = document.querySelector('form');
 
     if (!btn || !form) return;
 
-    const hayColoniasCargadas = () =>
-        document.querySelectorAll('.colonias-input-porcentaje').length > 0;
+    // ── helpers ────────────────────────────────────────────────────────────────
 
-    const validarFormulario = () => {
-
-        const selectUnidad = document.getElementById('unidad');
-
-let unidadValida = true;
-
-if (selectUnidad) {
-    const opciones = selectUnidad.querySelectorAll('option');
-
-    // Si solo tiene 1 opción (placeholder), aún no está listo
-    if (opciones.length <= 1) {
-        unidadValida = false;
-    } else {
-        unidadValida = selectUnidad.value !== '';
-    }
-}
-
-        // 1. Campos estáticos requeridos (select, inputs normales)
-        const camposEstaticos = form.querySelectorAll(
-            'input[required]:not(.colonias-input-porcentaje), select[required]'
-        );
-        const estaticosValidos = [...camposEstaticos].every(el => {
-            if (el.type === 'number') {
-                return el.value !== '';
-            }
-
-            if (el.tagName === 'SELECT') {
-                return el.value !== '' && el.value !== null;
-            }
-
-            return el.value && el.value.trim() !== '';
-        });
-
-        // 2. Colonias: solo validar si ya se cargaron
-        let coloniasValidas = true;
-        if (hayColoniasCargadas()) {
-            // Cada input de porcentaje debe tener valor
-            const inputsPorcentaje = document.querySelectorAll('.colonias-input-porcentaje');
-            const todosConValor = [...inputsPorcentaje].every(
-                inp => inp.value.trim() !== '' && parseFloat(inp.value) >= 0
-            );
-
-            // La suma debe ser exactamente 100
-            const suma = parseFloat(document.getElementById('suma_porcentaje')?.value) || 0;
-            const sumaValida = Math.abs(suma - 100) < 0.01; // tolerancia flotante
-
-            coloniasValidas = todosConValor && sumaValida;
-        } else {
-            // Si no hay colonias, la suma no aplica → resetear el campo visual
-            const sumaInput = document.getElementById('suma_porcentaje');
-            if (sumaInput) sumaInput.value = '';
-        }
-
-        const formValido = estaticosValidos && coloniasValidas;
-
-        console.log({
-    estaticosValidos,
-    coloniasValidas
-});
-
-        btn.disabled = !formValido;
-        btn.classList.toggle('btn-ready', formValido); // clase visual opcional
+    const unidadLista = () => {
+        if (!unidad) return true;
+        return unidad.querySelectorAll('option').length > 1 && unidad.value !== '';
     };
 
-    // Un solo listener global por evento, usando delegación
-    document.addEventListener('input', validarFormulario);
-    document.addEventListener('change', validarFormulario);
+    const camposEstaticosValidos = () => {
+        const campos = form.querySelectorAll(
+            'input[required]:not(.colonias-input-porcentaje), select[required]'
+        );
+        return [...campos].every(el => {
+            if (el.tagName === 'SELECT') return el.value !== '';
+            return el.value.trim() !== '';
+        });
+    };
 
-    // Revalidar cuando las colonias se regeneran (evento custom de rutas-colonias.js)
-    document.addEventListener('colonias:updated', validarFormulario);
+    const hayColonias = () =>
+        document.querySelectorAll('.colonias-input-porcentaje').length > 0;
 
-    // Estado inicial
-    validarFormulario();
+    const coloniasValidas = () => {
+        if (!hayColonias()) return true;
+
+        const inputs = [...document.querySelectorAll('.colonias-input-porcentaje')];
+
+        // Todos con valor numérico >= 0
+        const todosConValor = inputs.every(
+            inp => inp.value.trim() !== '' && parseFloat(inp.value) >= 0
+        );
+
+        // La suma debe ser totalColonias * 100 (cada colonia recibe 0-100%)
+        const suma = inputs.reduce((acc, inp) => acc + (parseFloat(inp.value) || 0), 0);
+        const totalEsperado = inputs.length * 100;
+
+        return todosConValor && Math.abs(suma - totalEsperado) < 0.01;
+    };
+
+    // ── validar: NO llama calcularPorcentaje para evitar recursión ────────────
+    const validar = () => {
+        const ok = camposEstaticosValidos() && unidadLista() && coloniasValidas();
+        btn.disabled = !ok;
+        btn.classList.toggle('btn-ready', ok);
+    };
+
+    // ── UN listener para input (delegación) ───────────────────────────────────
+    document.addEventListener('input', (e) => {
+        // Si es un input de colonia → recalcular primero, luego validar
+        if (e.target.classList.contains('colonias-input-porcentaje')) {
+            window.calcularPorcentaje?.();
+        }
+        validar();
+    });
+
+    // ── UN listener para change ───────────────────────────────────────────────
+    document.addEventListener('change', validar);
+
+    // ── Eventos custom (sin llamar calcularPorcentaje aquí para no loopear) ───
+    document.addEventListener('colonias:updated', validar);  // MutationObserver ya calculó
+    document.addEventListener('unidad:updated', validar);
+    // NOTA: NO escuchar 'porcentaje:updated' — ese evento ya no se emite
+
+    // ── Garantizar valores antes del submit ───────────────────────────────────
+    form.addEventListener('submit', (e) => {
+        window.calcularPorcentaje?.(); // última pasada defensiva
+
+        // Doble check: si los hiddens están vacíos y hay colonias, bloquear
+        const atendidoHidden = document.getElementById('porcentaje_atendido_hidden');
+        if (hayColonias() && (!atendidoHidden?.value || atendidoHidden.value === '')) {
+            e.preventDefault();
+            console.error('[Submit] porcentaje_atendido vacío — submit bloqueado');
+        }
+    });
+
+    // estado inicial
+    validar();
 });
 
 console.log('app.js cargado ✓');
-
-document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('fecha_captura');
-    if (input) {
-        const now = new Date();
-        input.value = now.toISOString().slice(0, 16);
-    }
-});
-

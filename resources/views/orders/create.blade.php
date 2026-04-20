@@ -5,6 +5,32 @@
         <div class="form-wrapper">
             {{ Breadcrumbs::render('create') }}
 
+            <!-- Mostrar errores de validación -->
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <strong>¡Error!</strong> No se pudo guardar la orden:
+                    <ul class="mt-2 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <!-- Mostrar mensaje de éxito -->
+            @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <!-- Mostrar mensaje de error -->
+            @if(session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="mb-4">
                 <h1>Complete todos los apartados</h1>
             </div>
@@ -103,6 +129,7 @@
                                     data-url="{{ route('orders.get_by_tipo_unidad') }}">
                                     <option value="" disabled hidden selected>Seleccione un tipo de unidad</option>
                                     @foreach($tipos_unidades as $id => $tipo_unidad)
+
                                         <option value="{{ $id }}">{{ $tipo_unidad }}</option>
                                     @endforeach
                                 </select>
@@ -244,61 +271,53 @@
 
                 <!-- METRICAS Y RENDIMIENTO -->
                 <div class="form-card modern-card mt-6">
-
                     <div class="card-header collapsible-header" onclick="toggleSection(this)">
                         <h2>Métricas y Rendimiento</h2>
-
                         <span class="toggle-icon">
                             <x-heroicon-o-plus-circle class="icon-plus w-6 h-6" />
                             <x-heroicon-o-minus-circle class="icon-minus w-6 h-6 hidden" />
                         </span>
                     </div>
-
                     <div class="collapsible-content">
                         <div class="form-grid">
-
                             <div class="input-group">
-                                <input type="number" step="0.01" id="suma_porcentaje" name="suma_porcentaje"
-                                    placeholder="Ingrese el porcentaje para cada colonia" readonly>
+                                {{-- Solo visual, sin name --}}
+                                <input type="number" step="0.01" id="suma_porcentaje"
+                                    placeholder="Se calcula automáticamente" readonly>
                                 <label for="suma_porcentaje">Suma de porcentaje atendido</label>
                             </div>
-
                             <div class="input-group">
-                                <input type="number" step="0.01" id="porcentaje_atendido" name="porcentaje_atendido"
-                                    placeholder="Ingrese el porcentaje para cada colonia" readonly>
+                                {{-- Solo visual, sin name --}}
+                                <input type="number" step="0.01" id="porcentaje_atendido"
+                                    placeholder="Se calcula automáticamente" readonly>
                                 <label for="porcentaje_atendido">Porcentaje atendido</label>
                             </div>
-
                         </div>
                     </div>
                 </div>
 
                 <!-- OBSERVACIONES -->
                 <div class="form-card modern-card mt-6">
-
                     <div class="card-header collapsible-header" onclick="toggleSection(this)">
                         <h2>Observaciones</h2>
-
                         <span class="toggle-icon">
                             <x-heroicon-o-plus-circle class="icon-plus w-6 h-6" />
                             <x-heroicon-o-minus-circle class="icon-minus w-6 h-6 hidden" />
                         </span>
                     </div>
-
                     <div class="collapsible-content">
-                        <div class="form-grid">
-
-                            <div class="input-group">
-                                <textarea id="observaciones" name="observaciones"
-                                    placeholder="En caso de no tener observaciones, dejar en blanco"></textarea>
-                                <label for="observaciones">Comentario</label>
-                            </div>
-
+                        <div class="input-group">
+                            <textarea id="observaciones" name="observaciones" placeholder="Observaciones"></textarea>
                         </div>
                     </div>
                 </div>
 
-                <!-- BOTN GLOBAL -->
+
+                <!-- Hiddens reales que llegan al backend -->
+                <input type="hidden" id="suma_porcentaje_hidden" name="suma_porcentaje">
+                <input type="hidden" id="porcentaje_atendido_hidden" name="porcentaje_atendido">
+
+                <!-- BOTÓN -->
                 <div class="form-actions mt-6">
                     <button type="submit" id="btnGuardar" class="btn-secondary">Guardar</button>
                 </div>
