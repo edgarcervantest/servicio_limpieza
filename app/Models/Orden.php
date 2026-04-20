@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Orden extends Model
 {
     protected $table = 'orden';
+    protected $primaryKey = 'id_orden'; // ajusta si es distinto
+    public $timestamps = false;
     public function folio()
     {
         return $this->belongsTo(Folio::class, 'id_folio', 'id_folio');
@@ -51,4 +53,32 @@ class Orden extends Model
             'id_colonia'
         )->withPivot('porcentaje_atendido', 'habitantes');
     }
+
+    protected $fillable = [
+    'fecha_orden',
+    'fecha_captura',
+    'id_folio',
+    'id_turno',
+    'id_ruta',
+    'id_despachador',
+    'id_chofer',
+    'id_tipo_unidad',
+    'id_unidad',
+    'creado_por',
+
+    'cantidad_kl',
+    'puches',
+    'km_salir',
+    'km_volver',
+    'km_total',
+
+    'diesel_inicial',
+    'diesel_cargado',
+    'diesel_final',
+    'diesel_gastado',
+
+    'suma_porcentaje',
+    'porcentaje_atendido',
+    'observaciones'
+];
 }

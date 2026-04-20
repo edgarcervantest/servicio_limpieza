@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Colonia extends Model
 {
     protected $table = 'colonia';
+    protected $primaryKey = 'id_colonia';
 
     public function ordenes()
     {
