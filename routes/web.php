@@ -25,3 +25,5 @@ Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 Route::get('/orders/get_by_tipo_unidad', [OrderController::class, 'get_by_tipo_unidad'])->name('orders.get_by_tipo_unidad');
 
+Route::get('/rutas/{id}/colonias', [OrderController::class, 'getColonias']);
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');

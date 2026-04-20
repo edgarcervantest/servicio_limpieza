@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Ruta extends Model
 {
     protected $table = 'ruta';
+    protected $primaryKey = 'id_ruta';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     public function colonias()
     {
