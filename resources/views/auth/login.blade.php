@@ -21,7 +21,7 @@
   <header class="bg-gob-vino w-full shadow-md">
     <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
       <div class="flex items-center space-x-2">
-        <h2 class="text-white text-lg font-bold tracking-wide "> Servicios de Limpieza </h2>
+        <h2 class="text-white text-lg font-bold tracking-wide "> SERVICIOS DE LIMPIEZA </h2>
       </div>
       
       <!-- <nav class="hidden md:flex items-center space-x-6 text-white text-sm">
@@ -88,10 +88,11 @@
           </button>
         </form>
 
-        <div class="mt-8 pt-6 border-t border-gray-100 flex flex-col items-center space-y-4">
-          <a href="#" class="text-sm text-gob-rojo hover:underline">¿Olvidaste tu contraseña?</a>
-          <p class="text-xs text-gray-400 uppercase tracking-widest">Servicios de Limpieza</p>
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <a href="#" class="text-sm text-gob-rojo hover:underline">Crear una cuenta</a>
+          <a href="{{ route('welcome') }}" class="text-sm text-gob-rojo hover:underline">Regresar al inicio</a>
         </div>
+        <p class="text-xs text-gray-400 uppercase tracking-widest">Servicios de Limpieza</p>
       </div>
     </div>
   </main>

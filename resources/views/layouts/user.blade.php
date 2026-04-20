@@ -40,7 +40,7 @@ $initialTime = Carbon::now('America/Matamoros');
 
             <!-- Botón logout desktop (visible solo en desktop) -->
             <div class="logout-desktop">
-                <form method="#" action="#">
+                <form method="#" action="{{ route('welcome') }}">
                     @csrf
                     <button class="btn-primary">
                         <x-heroicon-o-arrow-left-on-rectangle class="icon" />

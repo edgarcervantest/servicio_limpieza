@@ -18,7 +18,7 @@ $initialTime = Carbon::now('America/Matamoros');
     <div class="main">
         <nav class="nav-desktop-user">
             <div class="nav-header">
-                <h1>PAGINA DE BIENVENIDA</h1>
+                <h1>SERVICIOS DE LIMPIEZA</h1>
 
                 <!-- Botón hamburguesa (solo visible en móvil) -->
                 <button id="menuBtn" class="menu-btn">
@@ -38,12 +38,20 @@ $initialTime = Carbon::now('America/Matamoros');
                 <a>Fecha del sistema: <span id="liveClock"><?php echo $initialTime->toDateTimeString(); ?></span></a>
             </div>
 
-            <!-- Botón logout desktop (visible solo en desktop) -->
-            <div class="logout-desktop">
+            <!-- Botón login desktop (visible solo en desktop) -->
+            <div class="login-desktop">
 
                 <a href="{{ route('login') }}" class="btn-primary">
                     <x-heroicon-o-arrow-right-on-rectangle class="icon" />
                     Iniciar Sesión
+                </a>
+            </div>
+
+            <div class="register-desktop">
+
+                <a href="#" class="btn-primary">
+                    <x-heroicon-o-arrow-right-on-rectangle class="icon" />
+                    Registrarse
                 </a>
             </div>
         </nav>
