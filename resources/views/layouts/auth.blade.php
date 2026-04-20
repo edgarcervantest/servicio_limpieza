@@ -49,7 +49,7 @@ $initialTime = Carbon::now('America/Matamoros');
 
             <div class="register-desktop">
 
-                <a href="#" class="btn-primary">
+                <a href="{{ route('register') }}" class="btn-primary">
                     <x-heroicon-o-arrow-right-on-rectangle class="icon" />
                     Registrarse
                 </a>
